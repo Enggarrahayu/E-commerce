@@ -54,7 +54,6 @@ class AdminController extends Controller
             ]);
           }
         }
-        return redirect('admin/dashboard');
     }
 
     //Logout the admin
