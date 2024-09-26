@@ -55,5 +55,15 @@ Route::middleware('admin')->group(function () {
                 'destroy' => 'admin.coupons.destroy',
             ]
         ]);
+        Route::resource('product', CouponController::class, [
+            'names' => [
+                'index' => 'admin.product.index',
+                'create' => 'admin.product.create',
+                'store' => 'admin.product.store',
+                'edit' => 'admin.product.edit',
+                'update' => 'admin.product.update',
+                'destroy' => 'admin.product.destroy',
+            ]
+        ]);
     });
 });
