@@ -42,7 +42,7 @@ class ProductController extends Controller
      */
     public function store(AddProductRequest $request)
     {
-        $data = $request->all();
+        $data = $request->except(['color_id', 'size_id']);
         $data['thumbnail'] = $this->saveImage($request->file('thumbnail'));
         //Check if admin upload the second image
         if ($request->has('first_image')) {
@@ -82,7 +82,8 @@ class ProductController extends Controller
     {
         $colors = Color::all();
         $sizes = Size::all();
-        return view('admin.products.create')->with([
+
+        return view('admin.products.edit')->with([
             'colors' => $colors,
             'sizes' => $sizes,
             'product' => $product,
@@ -94,7 +95,7 @@ class ProductController extends Controller
      */
     public function update(UpdateProductRequest $request, Product $product)
     {
-        $data = $request->all();
+        $data = $request->except('color_id', 'size_id');
         if ($request->has('first_image')) {
             //Remove the old thumbnail
             $this->removeProductImageFromStorage($request->file('thumbnail'));
@@ -139,10 +140,10 @@ class ProductController extends Controller
     public function destroy(Product $product)
     {
         //remove product images
-        $this->removeProductImageFromStorage($product->file('thumbnail'));
-        $this->removeProductImageFromStorage($product->file('first_image'));
-        $this->removeProductImageFromStorage($product->file('second_image'));
-        $this->removeProductImageFromStorage($product->file('third_image'));
+        $this->removeProductImageFromStorage($product->thumbnail);
+        $this->removeProductImageFromStorage($product->first_image);
+        $this->removeProductImageFromStorage($product->second_image);
+        $this->removeProductImageFromStorage($product->third_image);
         //delete the product
         $product->delete();
         return redirect()->route('admin.products.index')->with([
